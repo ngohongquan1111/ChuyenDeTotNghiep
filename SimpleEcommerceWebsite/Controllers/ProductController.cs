@@ -29,7 +29,7 @@ namespace SimpleEcommerceWebsite.Controllers
 
             Product product = productService.GetProductById(productId.Value);
 
-            product.ImageURL = product.ImageURL.Replace("\\", "/");
+            product.ImageURL = product.ImageURL != null ? product.ImageURL.Replace("\\", "/") : string.Empty;
 
             return View(product);
         }
@@ -45,13 +45,27 @@ namespace SimpleEcommerceWebsite.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateProductInfomation(Product product)
+        public int UpdateProductInfomation(Product product)
         {
             var productService = new ProductService();
 
-            var targetProduct = productService.UpdateProduct(productId);
+            var productId = product.ProductID;
 
-            return View(targetProduct);
+            if (product.ImageUpload != null && product.ImageUpload.ContentLength > 0)
+            {
+                var fileName = Path.GetFileName(product.ImageUpload.FileName);
+
+                var path = Path.Combine(Server.MapPath("~/Content/upload"), fileName);
+
+                product.ImageUpload.SaveAs(path);
+
+                int IndexOfFile = path.IndexOf("Content");
+
+                product.ImageURL = "\\" + path.Substring(IndexOfFile);
+            }
+            var totalChanges = productService.UpdateProduct(product);
+
+            return totalChanges > 0 ? productId : 0 ;
         }
 
         [HttpPost]

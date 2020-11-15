@@ -3,6 +3,7 @@ using SimpleEcommerceWebsite.Service.Resource.Enum;
 using SimpleEcommerceWebsite.SimpleEcomerceDbContext;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
@@ -29,14 +30,11 @@ namespace SimpleEcommerceWebsite.Service
 
             using (var context = new EcommerceDbContext())
             {
-                var targetProduct = context.Products.Find(product.ProducerId);
+                context.Products.Attach(product);
 
-                if (targetProduct != null)
-                {
-                    targetProduct = product;
+                context.Entry(product).State = EntityState.Modified;
 
-                    totalChanges = context.SaveChanges();
-                }
+                totalChanges = context.SaveChanges();
             }
 
             return totalChanges;

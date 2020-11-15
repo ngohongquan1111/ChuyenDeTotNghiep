@@ -37,7 +37,7 @@
 <div class="well well-small">
 
 
-    @using (Html.BeginForm("UpdateProductInfomation", "Product", FormMethod.Post, new { @class = "form-horizontal", @id = "formAddProduct" }))
+    @using (Html.BeginForm("UpdateProductInfomation", "Product", FormMethod.Post, new { @class = "form-horizontal", @id = "formUpdateProduct" }))
     {
         @Html.TextBoxFor(m => m.ProductID, new { @type = "text", @id = "productId", @style="display:none" , @disble="disabled"})
 
@@ -46,7 +46,7 @@
                 <div id="myCarousel" class="carousel slide cntr">
                     <div class="carousel-inner">
                         <div class="item active">
-                            <a href="#"> <img id="imageURL" alt="" style="width:100%"></a>
+                            <a href="#"> <img id="imageURL" alt="" src="@Model.ImageURL" style="width:100%"></a>
                         </div>
                     </div>
                 </div>
@@ -127,7 +127,7 @@
             @Html.TextAreaFor(m => m.Description, new { @placeholder = "Enter your description here ....", @id = "description" })
         </div>
 
-        <button type="submit" id="saveButton" class="exclusive shopBtn"><span class="icon-save"></span> Add Product</button>
+        <button type="submit" id="saveButton" class="exclusive shopBtn"><span class="icon-save"></span> Update Product</button>
     }
 
 </div>
@@ -150,7 +150,7 @@
         readURL(this);
     });
 
-    $('#formAddProduct').on('submit', function (e) {
+    $('#formUpdateProduct').on('submit', function (e) {
         try {
             e.preventDefault();
             $.ajax({
@@ -168,7 +168,7 @@
                         window.location = "/Product/ViewDetail?productId=" + data;
                     } else
                     {
-                        alert("Insert Fail");
+                        alert("Update Fail");
                     }
                 }
             });
