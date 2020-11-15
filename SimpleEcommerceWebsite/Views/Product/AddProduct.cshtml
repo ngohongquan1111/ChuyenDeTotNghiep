@@ -1,0 +1,181 @@
+﻿@model SimpleEcommerceWebsite.Models.Product
+@using SimpleEcommerceWebsite.Service.Resource.Enum;
+@{
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Add New Product";
+
+    var productAllcode = AllcodeService.GetAllCodeByTable("Product");
+
+    var Color = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.Color.ToString());
+
+    var Marterial = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.Marterial.ToString());
+
+    var Producer = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.Producer.ToString());
+
+    var ProductType = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.ProductType.ToString());
+
+    var Brand = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.Brand.ToString());
+}
+<style>
+    #description {
+        width: -webkit-fill-available;
+        height: auto;
+    }
+
+    #saveButton{
+        width:100%;
+        margin-top:3%;
+        vertical-align:middle;
+    }
+</style>
+<ul class="breadcrumb">
+    <li><a href="/Home/Index">Home</a> <span class="divider">/</span></li>
+    <li><a href="/Product/ListProduct">Items</a> <span class="divider">/</span></li>
+    <li class="active">Add new a product</li>
+</ul>
+
+<div class="well well-small">
+
+
+    @using (Html.BeginForm("AddNewProduct", "Product", FormMethod.Post, new { @class = "form-horizontal", @id = "formAddProduct" }))
+    {
+        <div class="row-fluid">
+            <div class="span5">
+                <div id="myCarousel" class="carousel slide cntr">
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <a href="#"> <img id="imageURL" alt="" style="width:100%"></a>
+                        </div>
+                    </div>
+                </div>
+                @*<input type="file" id="imgInp" />*@
+                @Html.TextBoxFor(m => m.ImageUpload, new { @type = "file", @id = "imgInp" })
+            </div>
+
+            <div class="span7">
+                <label class="control-label"><span>Product's Name:</span></label>
+                <div class="controls">
+                    @Html.TextBoxFor(m => m.ProductName, new { @placeholder = "Enter Product Name", @maxlength = 50 })
+                </div>
+                <hr class="soft" />
+
+                <div class="control-group">
+                    <label class="control-label"><span>Price</span></label>
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.Price, new { @placeholder = "Price", @maxlength = 50, @type = "number" ,@class="span6" })
+                       
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label"><span>Quantity</span></label>
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.Quantity, new { @placeholder = "Quantiy", @maxlength = 50, @type = "number", @class = "span6" })
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label"><span>Color</span></label>
+                    <div class="controls">
+                        @Html.DropDownListFor(m => m.ColorId, new SelectList(Color, "IdentityValue", "IdentityValueName"), new { id = "ColorId", @class = "span11" })
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label"><span>Materials</span></label>
+                    <div class="controls">
+                        @Html.DropDownListFor(m => m.MaterialId, new SelectList(Marterial, "IdentityValue", "IdentityValueName"), new { id = "ColorId", @class = "span11" })
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        <hr class="softn clr" />
+
+        <ul id="productDetail" class="nav nav-tabs">
+            <li class="active"><a href="#home" data-toggle="tab">Product Details</a></li>
+        </ul>
+
+        <div id="myTabContent" class="tab-content tabWrapper">
+            <div class="tab-pane fade active in" id="home">
+                <h4>Product Information</h4>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr class="techSpecRow">
+                            <td class="techSpecTD1">Producer:</td>
+                            <td class="techSpecTD2"> @Html.DropDownListFor(m => m.ProducerId, new SelectList(Producer, "IdentityValue", "IdentityValueName"), new { id = "ProducerId", @class = "span5" })
+                            </td>
+                        </tr>
+                       
+                        <tr class="techSpecRow">
+                            <td class="techSpecTD1">Brand:</td>
+                            <td class="techSpecTD2"> @Html.DropDownListFor(m => m.BrandId, new SelectList(Brand, "IdentityValue", "IdentityValueName"), new { id = "BrandId", @class = "span5" })
+                            </td>
+                        </tr>
+                       
+                        <tr class="techSpecRow">
+                        <td class="techSpecTD1">Type:</td>
+                        <td class="techSpecTD2"> @Html.DropDownListFor(m => m.ProductTypeId, new SelectList(ProductType, "IdentityValue", "IdentityValueName"), new { id = "ProductTypeId", @class = "span5" })</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            @Html.TextAreaFor(m =>m.Description, new {@placeholder = "Enter your description here ....",@id= "description" })
+        </div>
+
+         <button type="submit" id="saveButton" class="exclusive shopBtn"><span class="icon-save"></span> Add Product</button>
+    }
+
+</div>
+
+
+
+
+
+<script>
+    function readURL(input) {
+        var reader = new FileReader();
+        if (input.files && input.files[0]) {
+            reader.onload = function (e) {
+                $('#imageURL').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+        else {
+            $('#imageURL').attr('src', "");
+        }
+    }
+
+    $("#imgInp").change(function () {
+        readURL(this);
+    });
+
+    $('#formAddProduct').on('submit', function (e) {
+        try {
+
+            e.preventDefault();
+
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                data: $(this).serialize(),
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                async: true, cache: false, traditional: true,
+                success: function (data) {
+                    console.log(data)
+                    if (data != 0) {
+                        window.location = "/Product/ViewDetail?productId=" + data;
+                    } else
+                    {
+                        alert("Insert Fail");
+                    }
+                }
+            });
+        }
+        catch (e) {
+            alert(e);
+            return false;
+        }
+    });
+</script>

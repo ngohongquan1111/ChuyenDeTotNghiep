@@ -1,0 +1,53 @@
+﻿@using SimpleEcommerceWebsite.Models
+@{
+    var products = ViewBag.Products == null ? new List<Product>() : ViewBag.Products as List<Product>;
+    ViewBag.Title = "Home Page";
+}
+
+    <div class="well well-small">
+        @{
+            if (products.Any())
+            {
+                foreach (var product in products)
+                {
+                    <div class="row-fluid">
+                        <div class="span2">
+                            <img src="@product.ImageURL" alt="">
+                        </div>
+                        <div class="span6">
+                            <h5>@product.ProductName </h5>
+                            <p>
+                                @product.Description
+                            </p>
+                        </div>
+                        <div class="span4 alignR">
+                            <form class="form-horizontal qtyFrm">
+                                <h3> @product.Price</h3>
+                                <label class="checkbox">
+                                    <input type="checkbox">  Adds product to compair
+                                </label><br>
+                                <div class="btn-group">
+                                    <a href="product_details.html" class="defaultBtn"><span class=" icon-shopping-cart"></span> Add to cart</a>
+                                    <a href="product_details.html" class="shopBtn">VIEW</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <hr class="soften">
+                }
+            }
+            else
+            {
+                <div class="row-fluid">
+                    <div class="span6">
+                        <h5>Data Not Found </h5>
+                        <p>
+                            Not found any items yet
+                        </p>
+                    </div>
+                </div>
+                <hr class="soften">
+            }
+        }
+
+    </div>

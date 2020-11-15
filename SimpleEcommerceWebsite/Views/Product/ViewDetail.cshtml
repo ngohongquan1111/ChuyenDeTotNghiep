@@ -1,0 +1,116 @@
+﻿@model SimpleEcommerceWebsite.Models.Product
+@using SimpleEcommerceWebsite.Service.Resource.Enum;
+@{
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Add New Product";
+
+    var productAllcode = AllcodeService.GetAllCodeByTable("Product");
+
+    var Color = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.Color.ToString());
+
+    var Marterial = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.Marterial.ToString());
+
+    var Producer = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.Producer.ToString());
+
+    var ProductType = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.ProductType.ToString());
+
+    var Brand = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.Brand.ToString());
+}
+
+<ul class="breadcrumb">
+    <li><a href="/Home/Index">Home</a> <span class="divider">/</span></li>
+    <li><a href="/Product/ListProduct">Items</a> <span class="divider">/</span></li>
+    <li class="active">Add new a product</li>
+</ul>
+
+
+<div class="well well-small">
+    <div class="row-fluid">
+        <div class="span5">
+            <div id="myCarousel" class="carousel slide cntr">
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <a href="#"> <img src="@Model.ImageURL" alt="" style="width:100%"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span7">
+            <h3>@Model.ProductName</h3>
+            <hr class="soft" />
+
+            <form class="form-horizontal qtyFrm">
+                <div class="control-group">
+                    <label class="control-label"><span>$@Model.Price</span></label>
+                    <div class="controls">
+                        <input type="number" value="@Model.Quantity" class="span6" placeholder="Qty." disabled>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label"><span>Color</span></label>
+                    <div class="controls">
+                        @Html.DropDownListFor(m => m.ColorId, new SelectList(Color, "IdentityValue", "IdentityValueName"), new { id = "ColorId", @class = "span11", @disabled = "disabled" })
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><span>Materials</span></label>
+                    <div class="controls">
+                        @Html.DropDownListFor(m => m.MaterialId, new SelectList(Marterial, "IdentityValue", "IdentityValueName"), new { id = "MaterialId", @class = "span11", @disabled = "disabled" })
+                    </div>
+                </div>
+                @{
+                    if (false)
+                    {
+                        <button type="submit" class="shopBtn"><span class=" icon-shopping-cart"></span> Add to cart</button>
+                    }
+
+                }
+
+            </form>
+        </div>
+    </div>
+    <hr class="softn clr" />
+
+    <ul id="productDetail" class="nav nav-tabs">
+        <li class="active"><a href="#home" data-toggle="tab">Product Details</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content tabWrapper">
+        <div class="tab-pane fade active in" id="home">
+            <h4>Product Information</h4>
+            <table class="table table-striped">
+                <tbody>
+                <tbody>
+                    <tr class="techSpecRow">
+                        <td class="techSpecTD1">Producer:</td>
+                        <td class="techSpecTD2">
+                            @Html.DropDownListFor(m => m.ProducerId, new SelectList(Producer, "IdentityValue", "IdentityValueName"), new { id = "ProducerId", @class = "span5", @disabled = "disabled" })
+                        </td>
+                    </tr>
+
+                    <tr class="techSpecRow">
+                        <td class="techSpecTD1">Brand:</td>
+                        <td class="techSpecTD2">
+                            @Html.DropDownListFor(m => m.BrandId, new SelectList(Brand, "IdentityValue", "IdentityValueName"), new { id = "BrandId", @class = "span5", @disabled = "disabled" })
+                        </td>
+                    </tr>
+
+                    <tr class="techSpecRow">
+                        <td class="techSpecTD1">Type:</td>
+                        <td class="techSpecTD2"> @Html.DropDownListFor(m => m.ProductTypeId, new SelectList(ProductType, "IdentityValue", "IdentityValueName"), new { id = "ProductTypeId", @class = "span5", @disabled = "disabled" })</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>@Model.Description</p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+
+

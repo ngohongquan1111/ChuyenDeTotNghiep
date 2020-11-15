@@ -1,0 +1,141 @@
+﻿@using SimpleEcommerceWebsite.Models;
+@{
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "ListProduct";
+    var products = ViewBag.Product != null ? ViewBag.Product as List<Product> : new List<Product>();
+}
+<style>
+    .wrapper-content {
+        margin: auto;
+        max-width: 150px;
+        height: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break:break-word;
+    }
+
+    p {
+        width: 100%;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+    }
+
+    #product-table {
+        table-layout: fixed;
+    }
+
+    #product-table .wrapper-content {
+        float: left;
+    }
+</style>
+<h2>List Product</h2>
+<div class="well">
+  
+</div>
+<div class="well">
+    <table class="table table-hover" id="product-table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Producer</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Price</th>
+                <th>Functions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                @{
+                    if (products.Any())
+                    {
+                        foreach (var product in products)
+                        {
+                            <td>
+                                <div class="wrapper-content">
+                                    <p>@product.ProducerId</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="wrapper-content">
+                                    <p>@product.ProductName</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="wrapper-content">
+                                    <p><img src="@product.ImageURL" height="100" width="100"></p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="wrapper-content">
+                                    <p>@product.ProducerId</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="wrapper-content">
+                                    <p>@product.ProductTypeId</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="wrapper-content">
+                                    <p>@product.ProductStatusId</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="wrapper-content">
+                                    <p>@product.Price.ToString()</p>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-default" onclick="DirectView(@product.ProductID)">View</button> ||
+                                <button class="btn btn-warning" onclick="EditProduct(@product.ProductID)">Edit</button> ||
+                                <button class="btn btn-danger" onclick="DeleteProduct(@product.ProductID)">Delete</button>
+                            </td>
+                        }
+                    }
+                    else
+                    {
+                        <td colspan="8" style="text-align:center; font-size:large;padding-top:20px">No data found</td>
+                    }
+                }
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function DirectView(currentId) {
+        window.location = '/Product/ViewDetail?food_id=' + currentId;
+    }
+
+    function EditProduct(currentId) {
+        window.location = '/Product/ViewDetail?food_id=' + currentId;
+    }
+
+    function DeleteProduct(currentId) {
+
+        var isConfirm = confirm('Are you sure to delete this Product?');
+
+        if (isConfirm) {
+            $.ajax({
+                url:'/Product/DeleteProduct/',
+                type: 'POST',
+                data: {
+                    productId: currentId
+                },
+                async: false, cache: false, traditional: true,
+                success: function (data) {
+                    if (data.isSuccess == true) {
+                        alert('Delete success');
+                    } else {
+                        alert('Delete Fail');
+                    }
+                }
+            });
+        }
+    }
+
+</script>

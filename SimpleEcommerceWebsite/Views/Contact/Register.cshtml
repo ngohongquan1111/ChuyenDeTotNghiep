@@ -1,0 +1,73 @@
+﻿@model SimpleEcommerceWebsite.Models.Account
+@{
+    ViewBag.Title = "Register";
+}
+
+<ul class="breadcrumb">
+    <li><a href="index.html">Home</a> <span class="divider">/</span></li>
+    <li class="active">Registration</li>
+</ul>
+<h3> Registration</h3>
+<hr class="soft" />
+<div class="well">
+    @using (Html.BeginForm("RegisterAccount", "Contact", FormMethod.Post, new { @class = "form-horizontal",@id="formRegister" }))
+    {
+        <h3>Your Personal Details</h3>
+        <div class="control-group">
+            <label class="control-label" for="inputEmail">Email <sup>*</sup></label>
+            <div class="controls">
+                @Html.TextBoxFor(m => m.EmailLogin, new {@placeholder = "Email Adress" })
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Password <sup>*</sup></label>
+            <div class="controls">
+                @Html.PasswordFor(m => m.Password, new { @placeholder = "Password" })
+            </div>
+            <div class="controls">
+                <span type="text" style="color:red" id="registerNotification"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" name="submitAccount"  onclick="return CheckValidate()" class="exclusive shopBtn">Register</button>
+            </div>
+        </div>
+    }
+   
+</div>
+
+<script>
+    $('#formRegister').on('submit', function (e) {
+        try {
+
+            e.preventDefault();
+           
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                data: $(this).serialize(),
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                async: true, cache: false, traditional: true,
+                success: function (data) {
+                    if (data.success == false) {
+                        $('#registerNotification').text(data.messages);
+                      
+                    } else {
+                        window.location.href();
+                    }
+                }
+            });
+        }
+        catch (e) {
+            alert(e);
+            return false;
+        }
+    });
+
+    function CheckValidate() {
+        return true;
+    }
+</script>
