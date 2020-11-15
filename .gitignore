@@ -1,3 +1,8 @@
-/SimpleEcommerceWebsite/Web.config
-/SimpleEcommerceWebsite/Web.Debug.config
-/SimpleEcommerceWebsite/Web.Release.config
+SimpleEcommerceWebsite/Web.config
+SimpleEcommerceWebsite/Web.Debug.config
+SimpleEcommerceWebsite/Web.Release.config/
+SimpleEcommerceWebsite/bin/*
+SimpleEcommerceWebsite/bin
+SimpleEcommerceWebsite/obj
+SimpleEcommerceWebsite/obj/*
+.vs
