@@ -165,6 +165,7 @@
                 success: function (data) {
                     console.log(data)
                     if (data != 0) {
+                        alert("Insert Success");
                         window.location = "/Product/ViewDetail?productId=" + data;
                     } else
                     {

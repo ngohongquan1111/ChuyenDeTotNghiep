@@ -171,3 +171,4 @@ C:\WorkSpace\DoAn\ChuyenDe\ChuyenDeTotNghiep\SimpleEcommerceWebsite\obj\Debug\Si
 C:\WorkSpace\DoAn\ChuyenDe\ChuyenDeTotNghiep\SimpleEcommerceWebsite\obj\Debug\SimpleEcommerceWebsite.csproj.CopyComplete
 C:\WorkSpace\DoAn\ChuyenDe\ChuyenDeTotNghiep\SimpleEcommerceWebsite\obj\Debug\SimpleEcommerceWebsite.dll
 C:\WorkSpace\DoAn\ChuyenDe\ChuyenDeTotNghiep\SimpleEcommerceWebsite\obj\Debug\SimpleEcommerceWebsite.pdb
+C:\WorkSpace\DoAn\ChuyenDe\ChuyenDeTotNghiep\SimpleEcommerceWebsite\obj\Debug\SimpleEcommerceWebsite.csprojAssemblyReference.cache
