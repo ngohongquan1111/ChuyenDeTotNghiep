@@ -1,5 +1,6 @@
 ﻿using SimpleEcommerceWebsite.Models;
 using SimpleEcommerceWebsite.Service.Resource;
+using SimpleEcommerceWebsite.Service.Resource.Enum;
 using SimpleEcommerceWebsite.SimpleEcomerceDbContext;
 using System;
 using System.Collections.Generic;
@@ -69,6 +70,11 @@ namespace SimpleEcommerceWebsite.Service.BaseService
             }
 
             return true;
+        }
+
+        public static bool IsLogin()
+        {
+            return SessionManager.GetSessionObject(SessionObjectEnum.SessionEnum.UserInfo) != null; 
         }
     }
 }

@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using SimpleEcommerceWebsite.Service.BaseService;
+@{
+    var isLogin = AccountService.IsLogin();
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -13,7 +17,7 @@
 
     <script src="~/Content/assets/js/bootstrap.min.js"></script>
     <script src="~/Content/assets/js/shop.js"></script>
-
+    <script src="~/Scripts/PaymentJs/CartProcessing.js"></script>
     <!-- Bootstrap styles -->
     <link href="~/Content/assets/css/bootstrap.css" rel="stylesheet" />
     <!-- Customize styles -->
@@ -48,7 +52,7 @@
                     <a href="#"><span class="icon-user"></span> My Account</a>
                     <a href="/Contact/Register"><span class="icon-edit"></span> Free Register </a>
                     <a href="contact.html"><span class="icon-envelope"></span> Contact us</a>
-                    <a href="cart.html"><span class="icon-shopping-cart"></span> 2 Item(s) - <span class="badge badge-warning"> $448.42</span></a>
+                    <a href="/Home/CheckOutCart"><span class="icon-shopping-cart"> </span><span class="number_product_on_cart"></span>  Item(s) - <span class="badge badge-warning totalAmount">$0</span></a>
                 </div>
             </div>
         </div>
@@ -58,31 +62,31 @@
     Lower Header Section
     -->
     <div class="container">
+        <div style="display:none">
+            <p id="CurrentLoginState">@isLogin</p>
+        </div>
         <div id="gototop"> </div>
         <header id="header">
             <div class="row">
                 <div class="span4">
                     <h1>
-                        <a class="logo" href="index.html">
+                        <a class="logo" href="/Home/Index">
                             <span>Twitter Bootstrap ecommerce template</span>
                             <img src="~/Content/assets/img/logo-bootstrap-shoping-cart.png" alt="bootstrap sexy shop">
                         </a>
                     </h1>
                 </div>
                 <div class="span4">
-                    <div class="offerNoteWrapper">
-                        <h1 class="dotmark">
-                            <i class="icon-cut"></i>
-                            Twitter Bootstrap shopping cart HTML template is available $14
-                        </h1>
-                    </div>
+                    @*<div class="offerNoteWrapper">
+                            <h1 class="dotmark">
+                                <i class="icon-cut"></i>
+                                Twitter Bootstrap shopping cart HTML template is available $14
+                            </h1>
+                        </div>*@
                 </div>
                 <div class="span4 alignR">
                     <p><br> <strong> Support (24/7) :  0800 1234 678 </strong><br><br></p>
-                    <span class="btn btn-mini">[ 2 ] <span class="icon-shopping-cart"></span></span>
-                    <span class="btn btn-warning btn-mini">$</span>
-                    <span class="btn btn-mini">&pound;</span>
-                    <span class="btn btn-mini">&euro;</span>
+                    <a href="/Home/CheckOutCart"><span class="btn btn-small"> <span class="icon-shopping-cart"> - Your cart: </span> <span class="number_product_on_cart" style="color:red; font-weight:bold">[0]</span></span></a>
                 </div>
             </div>
         </header>
@@ -136,67 +140,67 @@
         -->
         <div class="row">
             @*<div id="sidebar" class="span3">
-                <div class="well well-small">
-                    <ul class="nav nav-list">
-                        <li><a href="products.html"><span class="icon-chevron-right"></span>Fashion</a></li>
-                        <li><a href="products.html"><span class="icon-chevron-right"></span>Watches</a></li>
-                        <li><a href="products.html"><span class="icon-chevron-right"></span>Fine Jewelry</a></li>
-                        <li><a href="products.html"><span class="icon-chevron-right"></span>Fashion Jewelry</a></li>
-                        <li><a href="products.html"><span class="icon-chevron-right"></span>Engagement & Wedding</a></li>
-                        <li><a href="products.html"><span class="icon-chevron-right"></span>Men's Jewelry</a></li>
-                        <li><a href="products.html"><span class="icon-chevron-right"></span>Vintage & Antique</a></li>
-                        <li><a href="products.html"><span class="icon-chevron-right"></span>Loose Diamonds </a></li>
-                        <li><a href="products.html"><span class="icon-chevron-right"></span>Loose Beads</a></li>
-                        <li><a href="products.html"><span class="icon-chevron-right"></span>See All Jewelry & Watches</a></li>
+                    <div class="well well-small">
+                        <ul class="nav nav-list">
+                            <li><a href="products.html"><span class="icon-chevron-right"></span>Fashion</a></li>
+                            <li><a href="products.html"><span class="icon-chevron-right"></span>Watches</a></li>
+                            <li><a href="products.html"><span class="icon-chevron-right"></span>Fine Jewelry</a></li>
+                            <li><a href="products.html"><span class="icon-chevron-right"></span>Fashion Jewelry</a></li>
+                            <li><a href="products.html"><span class="icon-chevron-right"></span>Engagement & Wedding</a></li>
+                            <li><a href="products.html"><span class="icon-chevron-right"></span>Men's Jewelry</a></li>
+                            <li><a href="products.html"><span class="icon-chevron-right"></span>Vintage & Antique</a></li>
+                            <li><a href="products.html"><span class="icon-chevron-right"></span>Loose Diamonds </a></li>
+                            <li><a href="products.html"><span class="icon-chevron-right"></span>Loose Beads</a></li>
+                            <li><a href="products.html"><span class="icon-chevron-right"></span>See All Jewelry & Watches</a></li>
+                            <li style="border:0"> &nbsp;</li>
+                            <li> <a class="totalInCart" href="cart.html"><strong>Total Amount  <span class="badge badge-warning pull-right" style="line-height:18px;">$448.42</span></strong></a></li>
+                        </ul>
+                    </div>
+
+                    <div class="well well-small alert alert-warning cntr">
+                        <h2>50% Discount</h2>
+                        <p>
+                            only valid for online order. <br><br><a class="defaultBtn" href="#">Click here </a>
+                        </p>
+                    </div>
+                    <div class="well well-small"><a href="#"><img src="~/Content/assets/img/paypal.jpg" alt="payment method paypal"></a></div>
+
+                    <a class="shopBtn btn-block" href="#">Upcoming products <br><small>Click to view</small></a>
+                    <br>
+                    <br>
+                    <ul class="nav nav-list promowrapper">
+                        <li>
+                            <div class="thumbnail">
+                                <a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
+                                <img src="~/Content/assets/img/bootstrap-ecommerce-templates.png" alt="bootstrap ecommerce templates">
+                                <div class="caption">
+                                    <h4><a class="defaultBtn" href="product_details.html">VIEW</a> <span class="pull-right">$22.00</span></h4>
+                                </div>
+                            </div>
+                        </li>
                         <li style="border:0"> &nbsp;</li>
-                        <li> <a class="totalInCart" href="cart.html"><strong>Total Amount  <span class="badge badge-warning pull-right" style="line-height:18px;">$448.42</span></strong></a></li>
+                        <li>
+                            <div class="thumbnail">
+                                <a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
+                                <img src="~/Content/assets/img/shopping-cart-template.png" alt="shopping cart template">
+                                <div class="caption">
+                                    <h4><a class="defaultBtn" href="product_details.html">VIEW</a> <span class="pull-right">$22.00</span></h4>
+                                </div>
+                            </div>
+                        </li>
+                        <li style="border:0"> &nbsp;</li>
+                        <li>
+                            <div class="thumbnail">
+                                <a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
+                                <img src="~/Content/assets/img/bootstrap-template.png" alt="bootstrap template">
+                                <div class="caption">
+                                    <h4><a class="defaultBtn" href="product_details.html">VIEW</a> <span class="pull-right">$22.00</span></h4>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
-                </div>
 
-                <div class="well well-small alert alert-warning cntr">
-                    <h2>50% Discount</h2>
-                    <p>
-                        only valid for online order. <br><br><a class="defaultBtn" href="#">Click here </a>
-                    </p>
-                </div>
-                <div class="well well-small"><a href="#"><img src="~/Content/assets/img/paypal.jpg" alt="payment method paypal"></a></div>
-
-                <a class="shopBtn btn-block" href="#">Upcoming products <br><small>Click to view</small></a>
-                <br>
-                <br>
-                <ul class="nav nav-list promowrapper">
-                    <li>
-                        <div class="thumbnail">
-                            <a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-                            <img src="~/Content/assets/img/bootstrap-ecommerce-templates.png" alt="bootstrap ecommerce templates">
-                            <div class="caption">
-                                <h4><a class="defaultBtn" href="product_details.html">VIEW</a> <span class="pull-right">$22.00</span></h4>
-                            </div>
-                        </div>
-                    </li>
-                    <li style="border:0"> &nbsp;</li>
-                    <li>
-                        <div class="thumbnail">
-                            <a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-                            <img src="~/Content/assets/img/shopping-cart-template.png" alt="shopping cart template">
-                            <div class="caption">
-                                <h4><a class="defaultBtn" href="product_details.html">VIEW</a> <span class="pull-right">$22.00</span></h4>
-                            </div>
-                        </div>
-                    </li>
-                    <li style="border:0"> &nbsp;</li>
-                    <li>
-                        <div class="thumbnail">
-                            <a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-                            <img src="~/Content/assets/img/bootstrap-template.png" alt="bootstrap template">
-                            <div class="caption">
-                                <h4><a class="defaultBtn" href="product_details.html">VIEW</a> <span class="pull-right">$22.00</span></h4>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-
-            </div>*@
+                </div>*@
             <div class="span12">
                 @RenderBody()
             </div>

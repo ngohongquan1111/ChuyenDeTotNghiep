@@ -1,0 +1,101 @@
+﻿@using SimpleEcommerceWebsite.Models
+@using SimpleEcommerceWebsite.Service.Resource.Enum;
+@{
+    ViewBag.Title = "CheckOutCart";
+    Layout = "~/Views/Shared/_No_LeftMenu_Layout.cshtml";
+
+    var itemsInCart = ViewBag.ItemsInCart == null ? new List<Product>() : ViewBag.ItemsInCart as List<Product>;
+}
+
+<h2>Your Cart: @(itemsInCart!= null ? itemsInCart.Count() : 0) Item(s)</h2>
+
+
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="well">
+            @foreach (var product in itemsInCart)
+            {
+                <div class="row-fluid">
+                    <div class="span2">
+                        <img src="@product.ImageURL" alt="">
+                    </div>
+                    <div class="span6">
+                        <h5>@product.ProductName </h5>
+                        <p>
+                            @product.Description
+                        </p>
+                        @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.Producer.ToString(), product.ProducerId)
+                        <p>
+                        <p> @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.ProductType.ToString(), product.ProductTypeId)</p>
+                    </div>
+                    <div class="span4 alignR">
+                        <form class="form-horizontal qtyFrm">
+                            <h3>Cost: $@product.Price</h3>
+                            <div class="btn-group">
+                                <button class="defaultBtn" onclick="RemoveFromCart(@product.ProductID)"><span class=" icon-remove"></span> Remove</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr class="soften">
+            }
+      
+            <button class="exclusive shopBtn" style="width:-webkit-fill-available" onclick="AcceptPaymen()"><span class="icon-check"></span> Pay: <span class="totalAmount"></span></button>
+      
+          
+        </div>
+     
+    </div>
+</div>
+
+<script>
+    function RemoveFromCart(productId) {
+        var isConfirm = confirm('Are you sure to remove this Product ?');
+
+        if (isConfirm == true) {
+            $.ajax({
+                url: '/Home/RemoveProduct/',
+                type: 'POST',
+                data: {
+                    productId: productId
+                },
+                async: false, cache: false, traditional: true,
+                success: function (data) {
+                    if (data == "true") {
+                        alert('Remove Success');
+                        location.reload();
+                    } else {
+                        alert('Remove Success');
+                        location.reload();
+                    }
+                }
+            });
+        }
+    }
+
+    function AcceptPaymen() {
+        var isLogin = $('.CurrentLoginState').val();
+
+        if (!isLogin) {
+            alert('You have to login to finnish payment');
+            window.location.href = '/Contact/Login';
+        }
+
+        $.ajax({
+            url: '/Home/AcceptPayment/',
+            type: 'POST',
+            async: false, cache: false, traditional: true,
+            success: function (data) {
+                console.log(data);
+                if (data > 0) {
+                    $(".number_product_on_cart").text(data);
+                } else {
+                    $(".number_product_on_cart").text(0);
+                }
+            }
+        });
+    }
+</script>
+
+

@@ -32,5 +32,13 @@ namespace SimpleEcommerceWebsite
 
             return allCodes;
         }
+
+        public static string GetIdentityNameFromValue(string spaceName, string scopeName,int value )
+        {
+          return GetAll().Where(al => al.IdentitySpace == spaceName &&
+                                      al.IdentityScope == scopeName &&
+                                      al.IdentityValue == value)
+                        .Select(x => x.IdentityValueName).FirstOrDefault();
+        }
     }
 }

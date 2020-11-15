@@ -7,21 +7,38 @@ namespace SimpleEcommerceWebsite.Models
 {
     public class ShoppingCart
     {
-        private List<Order> _orders = new List<Order>();
+        private List<Product> _products = new List<Product>();
 
-        public ShoppingCart(List<Order> orders)
+        public ShoppingCart(List<Product> product)
         {
-            this._orders = orders;
+            this._products = product;
         }
 
-        public void AddCart(Order order)
+        public void AddCart(Product product)
         {
-            this._orders.Add(order);
+            this._products.Add(product);
         }
 
-        public void RemoveCart(Order order)
+        public void RemoveCart(Product product)
         {
-            this._orders.Remove(order);
+            var targetProduct = this._products.Where(x => x.ProductID == product.ProductID).FirstOrDefault();
+
+            this._products.Remove(targetProduct);
+        }
+
+        public int GetCurrentNumberOfItem()
+        {
+            return this._products.Any() ? this._products.Count() : 0;
+        }
+
+        public decimal GetTotalAmount()
+        {
+            return this._products.Any() ? this._products.Sum(p => p.Price) : 0;
+        }
+
+        public List<Product> GetProductsInCart()
+        {
+            return this._products;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@using SimpleEcommerceWebsite.Models;
+@using SimpleEcommerceWebsite.Service.Resource.Enum;
 @{
-    Layout = "/Views/Shared/_AdminLayout.cshtml";
+    Layout = "/Views/Shared/_No_LeftMenu_Layout.cshtml";
     ViewBag.Title = "ListProduct";
     var products = ViewBag.Product != null ? ViewBag.Product as List<Product> : new List<Product>();
 }
@@ -54,7 +55,6 @@
                     foreach (var product in products)
                     {
                         <tr>
-
                             <td>
                                 <div class="wrapper-content">
                                     <p>@product.ProductID</p>
@@ -72,17 +72,18 @@
                             </td>
                             <td>
                                 <div class="wrapper-content">
-                                    <p>@product.ProducerId</p>
+                                    <p>@AllcodeService.GetIdentityNameFromValue("Product",ProductEnum.ProductCodes.Producer.ToString(),product.ProducerId)</p>
                                 </div>
                             </td>
                             <td>
                                 <div class="wrapper-content">
-                                    <p>@product.ProductTypeId</p>
+                                   
+                                    <p> @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.ProductType.ToString(), product.ProductTypeId)</p>
                                 </div>
                             </td>
                             <td>
                                 <div class="wrapper-content">
-                                    <p>@product.ProductStatusId</p>
+                                    <p>  @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.ProductStatus.ToString(), product.ProductStatusId)</p>
                                 </div>
                             </td>
                             <td>

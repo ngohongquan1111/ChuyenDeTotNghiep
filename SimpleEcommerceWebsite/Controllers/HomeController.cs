@@ -20,7 +20,7 @@ namespace SimpleEcommerceWebsite.Controllers
             Expression<Func<Product, bool>> predicate = products => products.ProductStatusId != (int)ProductEnum.Status.Deleted;
 
             ViewBag.Products = productService.GetProductByExpression(predicate);
-           
+
             return View();
         }
 
@@ -34,6 +34,96 @@ namespace SimpleEcommerceWebsite.Controllers
         public ActionResult SiteManager()
         {
             return View();
+        }
+
+        public ActionResult CheckOutCart()
+        {
+            var cartService = new ShoppingCartService();
+
+            var cart = cartService.RetrieveShoppingCart();
+
+            ViewBag.ItemsInCart = cart.GetProductsInCart();
+
+            return View();
+        }
+
+        [HttpPost]
+        public int GetDraftCarts()
+        {
+            var shoppingCartService = new ShoppingCartService();
+
+            return shoppingCartService.GetTotalItemInCart();
+        }
+
+        [HttpPost]
+        public bool AddToCartProduct(int productId, int numberOfProduct)
+        {
+            try
+            {
+                var productService = new ProductService();
+
+                var shoppingCartService = new ShoppingCartService();
+
+                var product = productService.GetProductById(productId);
+
+                if (product != null)
+                {
+                    List<Product> products = new List<Product>();
+
+                    for (int i = 0; i < numberOfProduct; i++)
+                    {
+                        products.Add(product);
+                    }
+
+                    shoppingCartService.AddToCard(products);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        [HttpPost]
+        public decimal GetTotalAmount()
+        {
+            var shoppingCartService = new ShoppingCartService();
+
+            var cart = shoppingCartService.RetrieveShoppingCart();
+
+            return cart.GetTotalAmount();
+        }
+
+
+        [HttpPost]
+        public ActionResult AcceptPayment()
+        {
+            var shoppingCartService = new ShoppingCartService();
+
+            var cart = shoppingCartService.RetrieveShoppingCart();
+
+            return null;
+        }
+
+        [HttpPost]
+        public bool RemoveProduct(int productId)
+        {
+            var shoppingCartService = new ShoppingCartService();
+
+            var productService = new ProductService();
+
+            var product = productService.GetProductById(productId);
+
+            if (product != null)
+            {
+                shoppingCartService.RemoveOrder(product);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
