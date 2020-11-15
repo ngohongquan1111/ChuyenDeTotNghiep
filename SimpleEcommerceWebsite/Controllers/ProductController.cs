@@ -14,6 +14,12 @@ namespace SimpleEcommerceWebsite.Controllers
 
         public ActionResult ListProduct()
         {
+            var productService = new ProductService();
+
+            Expression<Func<Product, bool>> predicate = products => products.ProductStatusId != (int)ProductEnum.Status.Deleted;
+
+            ViewBag.Product = productService.GetProductByExpression(predicate);
+
             return View();
         }
 
@@ -96,19 +102,19 @@ namespace SimpleEcommerceWebsite.Controllers
         }
 
         [HttpPost]
-        public bool DeleteProduct(int? productId)
+        public int DeleteProduct(int? productId)
         {
             var productService = new ProductService();
 
             var product = productService.GetProductById(productId.Value);
 
-            var isSuccess = false;
+            var isSuccess = 0;
 
             if (product != null)
             {
                 product.ProductStatusId = (int) ProductEnum.Status.Deleted;
 
-                isSuccess = productService.UpdateProduct(product) > 0;
+                isSuccess = productService.UpdateProduct(product);
             }
 
             return isSuccess;

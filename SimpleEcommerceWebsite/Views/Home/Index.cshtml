@@ -22,13 +22,13 @@
                         </div>
                         <div class="span4 alignR">
                             <form class="form-horizontal qtyFrm">
-                                <h3> @product.Price</h3>
-                                <label class="checkbox">
+                                <h3>$@product.Price</h3>
+                                @*<label class="checkbox">
                                     <input type="checkbox">  Adds product to compair
-                                </label><br>
+                                </label><br>*@
                                 <div class="btn-group">
                                     <a href="product_details.html" class="defaultBtn"><span class=" icon-shopping-cart"></span> Add to cart</a>
-                                    <a href="product_details.html" class="shopBtn">VIEW</a>
+                                    <a href="/Product/ViewDetail?productId=@product.ProductID" class="shopBtn">View</a>
                                 </div>
                             </form>
                         </div>

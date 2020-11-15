@@ -12,6 +12,8 @@ namespace SimpleEcommerceWebsite.Service
 {
     public class ProductService
     {
+        public dynamic Get { get; internal set; }
+
         public Product GetProductById(int productId)
         {
             Product product = new Product();

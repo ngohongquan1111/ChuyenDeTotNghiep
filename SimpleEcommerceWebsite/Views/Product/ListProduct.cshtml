@@ -11,7 +11,7 @@
         height: auto;
         overflow: hidden;
         text-overflow: ellipsis;
-        word-break:break-word;
+        word-break: break-word;
     }
 
     p {
@@ -25,16 +25,16 @@
         table-layout: fixed;
     }
 
-    #product-table .wrapper-content {
-        float: left;
-    }
+        #product-table .wrapper-content {
+            float: left;
+        }
 </style>
 <h2>List Product</h2>
 <div class="well">
-  
+
 </div>
 <div class="well">
-    <table class="table table-hover" id="product-table">
+    <table class="table" id="product-table">
         <thead>
             <tr>
                 <th>Id</th>
@@ -48,15 +48,16 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                @{
-                    if (products.Any())
+            @{
+                if (products.Any())
+                {
+                    foreach (var product in products)
                     {
-                        foreach (var product in products)
-                        {
+                        <tr>
+
                             <td>
                                 <div class="wrapper-content">
-                                    <p>@product.ProducerId</p>
+                                    <p>@product.ProductID</p>
                                 </div>
                             </td>
                             <td>
@@ -94,48 +95,50 @@
                                 <button class="btn btn-warning" onclick="EditProduct(@product.ProductID)">Edit</button> ||
                                 <button class="btn btn-danger" onclick="DeleteProduct(@product.ProductID)">Delete</button>
                             </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                <td colspan="8" style="text-align:center; font-size:large;padding-top:20px">No data found</td>
+            }
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function DirectView(currentId) {
+            window.location = '/Product/ViewDetail?productId=' + currentId;
+        }
+
+        function EditProduct(currentId) {
+            window.location = '/Product/ViewDetail?productId=' + currentId;
+        }
+
+        function DeleteProduct(currentId) {
+
+            var isConfirm = confirm('Are you sure to delete this Product?');
+
+            if (isConfirm) {
+                $.ajax({
+                    url: '/Product/DeleteProduct/',
+                    type: 'POST',
+                    data: {
+                        productId: currentId
+                    },
+                    async: false, cache: false, traditional: true,
+                    success: function (data) {
+                        console.log(data);
+                        if (data > 0) {
+                            alert('Delete success');
+                            location.reload();
+                        } else {
+                            alert('Delete Fail');
                         }
                     }
-                    else
-                    {
-                        <td colspan="8" style="text-align:center; font-size:large;padding-top:20px">No data found</td>
-                    }
-                }
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<script>
-    function DirectView(currentId) {
-        window.location = '/Product/ViewDetail?food_id=' + currentId;
-    }
-
-    function EditProduct(currentId) {
-        window.location = '/Product/ViewDetail?food_id=' + currentId;
-    }
-
-    function DeleteProduct(currentId) {
-
-        var isConfirm = confirm('Are you sure to delete this Product?');
-
-        if (isConfirm) {
-            $.ajax({
-                url:'/Product/DeleteProduct/',
-                type: 'POST',
-                data: {
-                    productId: currentId
-                },
-                async: false, cache: false, traditional: true,
-                success: function (data) {
-                    if (data.isSuccess == true) {
-                        alert('Delete success');
-                    } else {
-                        alert('Delete Fail');
-                    }
-                }
-            });
+                });
+            }
         }
-    }
 
-</script>
+    </script>
