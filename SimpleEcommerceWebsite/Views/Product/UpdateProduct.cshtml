@@ -22,10 +22,10 @@
         height: auto;
     }
 
-    #saveButton{
-        width:100%;
-        margin-top:3%;
-        vertical-align:middle;
+    #saveButton {
+        width: 100%;
+        margin-top: 3%;
+        vertical-align: middle;
     }
 </style>
 <ul class="breadcrumb">
@@ -37,8 +37,10 @@
 <div class="well well-small">
 
 
-    @using (Html.BeginForm("AddNewProduct", "Product", FormMethod.Post, new { @class = "form-horizontal", @id = "formAddProduct" }))
+    @using (Html.BeginForm("UpdateProductInfomation", "Product", FormMethod.Post, new { @class = "form-horizontal", @id = "formAddProduct" }))
     {
+        @Html.TextBoxFor(m => m.ProductID, new { @type = "text", @id = "productId", @style="display:none" , @disble="disabled"})
+
         <div class="row-fluid">
             <div class="span5">
                 <div id="myCarousel" class="carousel slide cntr">
@@ -48,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                @*<input type="file" id="imgInp" />*@
+
                 @Html.TextBoxFor(m => m.ImageUpload, new { @type = "file", @id = "imgInp" })
             </div>
 
@@ -62,8 +64,8 @@
                 <div class="control-group">
                     <label class="control-label"><span>Price</span></label>
                     <div class="controls">
-                        @Html.TextBoxFor(m => m.Price, new { @placeholder = "Price", @maxlength = 50, @type = "number" ,@class="span6" })
-                       
+                        @Html.TextBoxFor(m => m.Price, new { @placeholder = "Price", @maxlength = 50, @type = "number", @class = "span6" })
+
                     </div>
                 </div>
 
@@ -88,7 +90,7 @@
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
 
         <hr class="softn clr" />
 
@@ -103,33 +105,32 @@
                     <tbody>
                         <tr class="techSpecRow">
                             <td class="techSpecTD1">Producer:</td>
-                            <td class="techSpecTD2"> @Html.DropDownListFor(m => m.ProducerId, new SelectList(Producer, "IdentityValue", "IdentityValueName"), new { id = "ProducerId", @class = "span5" })
+                            <td class="techSpecTD2">
+                                @Html.DropDownListFor(m => m.ProducerId, new SelectList(Producer, "IdentityValue", "IdentityValueName"), new { id = "ProducerId", @class = "span5" })
                             </td>
                         </tr>
-                       
+
                         <tr class="techSpecRow">
                             <td class="techSpecTD1">Brand:</td>
-                            <td class="techSpecTD2"> @Html.DropDownListFor(m => m.BrandId, new SelectList(Brand, "IdentityValue", "IdentityValueName"), new { id = "BrandId", @class = "span5" })
+                            <td class="techSpecTD2">
+                                @Html.DropDownListFor(m => m.BrandId, new SelectList(Brand, "IdentityValue", "IdentityValueName"), new { id = "BrandId", @class = "span5" })
                             </td>
                         </tr>
-                       
+
                         <tr class="techSpecRow">
-                        <td class="techSpecTD1">Type:</td>
-                        <td class="techSpecTD2"> @Html.DropDownListFor(m => m.ProductTypeId, new SelectList(ProductType, "IdentityValue", "IdentityValueName"), new { id = "ProductTypeId", @class = "span5" })</td></tr>
+                            <td class="techSpecTD1">Type:</td>
+                            <td class="techSpecTD2"> @Html.DropDownListFor(m => m.ProductTypeId, new SelectList(ProductType, "IdentityValue", "IdentityValueName"), new { id = "ProductTypeId", @class = "span5" })</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-            @Html.TextAreaFor(m =>m.Description, new {@placeholder = "Enter your description here ....",@id= "description" })
+            @Html.TextAreaFor(m => m.Description, new { @placeholder = "Enter your description here ....", @id = "description" })
         </div>
 
-         <button type="submit" id="saveButton" class="exclusive shopBtn"><span class="icon-save"></span> Add Product</button>
+        <button type="submit" id="saveButton" class="exclusive shopBtn"><span class="icon-save"></span> Add Product</button>
     }
 
 </div>
-
-
-
-
 
 <script>
     function readURL(input) {
@@ -163,7 +164,7 @@
                 success: function (data) {
                     console.log(data)
                     if (data != 0) {
-                        alert("Insert Success");
+                        alert("Update Success");
                         window.location = "/Product/ViewDetail?productId=" + data;
                     } else
                     {

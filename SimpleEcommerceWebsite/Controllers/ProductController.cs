@@ -34,6 +34,26 @@ namespace SimpleEcommerceWebsite.Controllers
             return View(product);
         }
 
+        [HttpGet]
+        public ActionResult UpdateProduct(int productId)
+        {
+            var productService = new ProductService();
+
+            var targetProduct = productService.GetProductById(productId);
+
+            return View(targetProduct);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProductInfomation(Product product)
+        {
+            var productService = new ProductService();
+
+            var targetProduct = productService.UpdateProduct(productId);
+
+            return View(targetProduct);
+        }
+
         [HttpPost]
         public int AddNewProduct(Product product)
         {
