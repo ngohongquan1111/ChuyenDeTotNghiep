@@ -10,7 +10,7 @@ namespace SimpleEcommerceWebsite.Service.BaseService
 {
     public class AccountService
     {
-        private Account FindAccount(Account account)
+        public Account FindAccount(Account account)
         {
             var accountResult = new Account();
 
@@ -18,7 +18,7 @@ namespace SimpleEcommerceWebsite.Service.BaseService
             {
                 using (var dbContext = new EcommerceDbContext())
                 {
-                    accountResult = dbContext.Accounts.Where(a => a.AccountId == account.AccountId || a.EmailLogin == account.EmailLogin).FirstOrDefault();
+                    accountResult = dbContext.Accounts.Where(a => a.EmailLogin == account.EmailLogin).FirstOrDefault();
                 }
             }
             else
@@ -43,7 +43,7 @@ namespace SimpleEcommerceWebsite.Service.BaseService
 
             if (FindAccount(account) != null)
             {
-                throw new Exception("Email is registered, Forgot your pass word?");
+                throw new Exception("Email is not valid, choose another email");
             }
 
             var newAccountRegister = new Account();
@@ -72,9 +72,30 @@ namespace SimpleEcommerceWebsite.Service.BaseService
             return true;
         }
 
+        public bool ValidateLoginAccount(Account account, out string message)
+        {
+            message = string.Empty;
+
+            var targetAccount = FindAccount(account);
+
+            if (targetAccount == null)
+            {
+                throw new Exception("Account is not valid");
+            }
+
+            var passwordEncrypted = account.Password.EncriptString() + targetAccount.PassWordSalt;
+
+            return passwordEncrypted == targetAccount.Password;
+        }
+
         public static bool IsLogin()
         {
             return SessionManager.GetSessionObject(SessionObjectEnum.SessionEnum.UserInfo) != null; 
+        }
+
+        public static Account GetAccountLogin()
+        {
+            return SessionManager.GetSessionObject(SessionObjectEnum.SessionEnum.UserInfo) as Account;
         }
     }
 }

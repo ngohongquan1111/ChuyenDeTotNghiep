@@ -1,6 +1,12 @@
 ﻿@using SimpleEcommerceWebsite.Service.BaseService;
-@{ 
+@{
     var isLogin = AccountService.IsLogin();
+
+    var contactEmail = string.Empty;
+    if (isLogin)
+    {
+        contactEmail = AccountService.GetAccountLogin().EmailLogin;
+    }
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -62,9 +68,9 @@
     Lower Header Section
     -->
     <div class="container">
-    <div style="display:none">
-        <p id="CurrentLoginState">@isLogin</p>
-    </div>
+        <div style="display:none">
+            <p id="CurrentLoginState">@isLogin</p>
+        </div>
         <div id="gototop"> </div>
         <header id="header">
             <div class="row">
@@ -78,11 +84,11 @@
                 </div>
                 <div class="span4">
                     @*<div class="offerNoteWrapper">
-                        <h1 class="dotmark">
-                            <i class="icon-cut"></i>
-                            Twitter Bootstrap shopping cart HTML template is available $14
-                        </h1>
-                    </div>*@
+                            <h1 class="dotmark">
+                                <i class="icon-cut"></i>
+                                Twitter Bootstrap shopping cart HTML template is available $14
+                            </h1>
+                        </div>*@
                 </div>
                 <div class="span4 alignR">
                     <p><br> <strong> Support (24/7) :  0800 1234 678 </strong><br><br></p>
@@ -90,7 +96,7 @@
 
                 </div>
             </div>
-         
+
         </header>
 
         <!--
@@ -114,23 +120,16 @@
                         </form>
                         <ul class="nav pull-right">
                             <li class="dropdown">
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-lock"></span> Login <b class="caret"></b></a>
-                                <div class="dropdown-menu">
-                                    <form class="form-horizontal loginFrm">
-                                        <div class="control-group">
-                                            <input type="text" class="span2" id="inputEmail" placeholder="Email">
-                                        </div>
-                                        <div class="control-group">
-                                            <input type="password" class="span2" id="inputPassword" placeholder="Password">
-                                        </div>
-                                        <div class="control-group">
-                                            <label class="checkbox">
-                                                <input type="checkbox"> Remember me
-                                            </label>
-                                            <button type="submit" class="shopBtn btn-block">Sign in</button>
-                                        </div>
-                                    </form>
-                                </div>
+                                @{
+                                    if (isLogin)
+                                    {
+                                        <a href="#">@contactEmail </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/Contact/Login"><span class="icon-lock"></span> Login </a>
+                                    }
+                                }
                             </li>
                         </ul>
                     </div>
@@ -152,7 +151,7 @@
                         <li><a href="#"><span class="icon-chevron-right"></span>Perfume </a></li>
                         <li><a href="#"><span class="icon-chevron-right"></span>Foam cleanser</a></li>
                         <li style="border:0"> &nbsp;</li>
-                        <li> <a class="totalInCart" href="cart.html"><strong>Total Amount  <span class="badge badge-warning pull-right totalAmount" style="line-height:18px;">$448.42</span></strong></a></li>
+                        <li> <a class="totalInCart" href="/Home/CheckOutCart"><strong>Total Amount  <span class="badge badge-warning pull-right totalAmount" style="line-height:18px;">$448.42</span></strong></a></li>
                     </ul>
                 </div>
 
@@ -255,6 +254,6 @@
     </div>
     <a href="#" class="gotop"><i class="icon-double-angle-up"></i></a>
     <!-- Placed at the end of the document so the pages load faster -->
-   
+
 </body>
 </html>

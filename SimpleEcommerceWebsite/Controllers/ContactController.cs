@@ -1,4 +1,5 @@
 ﻿using SimpleEcommerceWebsite.Models;
+using SimpleEcommerceWebsite.Service;
 using SimpleEcommerceWebsite.Service.BaseService;
 using SimpleEcommerceWebsite.Service.Resource.Enum;
 using System;
@@ -46,5 +47,36 @@ namespace SimpleEcommerceWebsite.Controllers
                 return Json(new { success = false, messages = ex.Message});
             }
         }
+
+        [HttpPost]
+        public ActionResult AccountLogin(Account account)
+        {
+            try
+            {
+                var accountService = new AccountService();
+
+                var isExistedAccount = accountService.ValidateLoginAccount(account, out string mess);
+
+                if (isExistedAccount)
+                {
+                    var accountLogin = accountService.FindAccount(account);
+
+                    SessionManager.SetSessionObject(SessionObjectEnum.SessionEnum.UserInfo, accountLogin);
+
+                    return Json(new { success = "true", messages = "Login successfull" });
+                }
+                else
+                {
+                    return Json(new { success = "false", messages = "Login fail" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, messages = ex.Message });
+            }
+        }
+
+
+      
     }
 }

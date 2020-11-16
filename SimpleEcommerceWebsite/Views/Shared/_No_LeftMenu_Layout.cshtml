@@ -1,6 +1,12 @@
 ﻿@using SimpleEcommerceWebsite.Service.BaseService;
 @{
     var isLogin = AccountService.IsLogin();
+
+    var contactEmail = string.Empty;
+    if (isLogin)
+    {
+        contactEmail = AccountService.GetAccountLogin().EmailLogin;
+    }
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -86,6 +92,7 @@
                 </div>
                 <div class="span4 alignR">
                     <p><br> <strong> Support (24/7) :  0800 1234 678 </strong><br><br></p>
+                  
                     <a href="/Home/CheckOutCart"><span class="btn btn-small"> <span class="icon-shopping-cart"> - Your cart: </span> <span class="number_product_on_cart" style="color:red; font-weight:bold">[0]</span></span></a>
                 </div>
             </div>
@@ -112,23 +119,16 @@
                         </form>
                         <ul class="nav pull-right">
                             <li class="dropdown">
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-lock"></span> Login <b class="caret"></b></a>
-                                <div class="dropdown-menu">
-                                    <form class="form-horizontal loginFrm">
-                                        <div class="control-group">
-                                            <input type="text" class="span2" id="inputEmail" placeholder="Email">
-                                        </div>
-                                        <div class="control-group">
-                                            <input type="password" class="span2" id="inputPassword" placeholder="Password">
-                                        </div>
-                                        <div class="control-group">
-                                            <label class="checkbox">
-                                                <input type="checkbox"> Remember me
-                                            </label>
-                                            <button type="submit" class="shopBtn btn-block">Sign in</button>
-                                        </div>
-                                    </form>
-                                </div>
+                                @{
+                                    if (isLogin)
+                                    {
+                                        <a href="#">@contactEmail </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/Contact/Login"><span class="icon-lock"></span> Login </a>
+                                    }
+                                }
                             </li>
                         </ul>
                     </div>

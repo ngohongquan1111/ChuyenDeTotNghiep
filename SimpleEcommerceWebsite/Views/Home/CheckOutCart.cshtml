@@ -80,6 +80,7 @@
         if (!isLogin) {
             alert('You have to login to finnish payment');
             window.location.href = '/Contact/Login';
+            return;
         }
 
         $.ajax({
@@ -87,11 +88,12 @@
             type: 'POST',
             async: false, cache: false, traditional: true,
             success: function (data) {
-                console.log(data);
-                if (data > 0) {
-                    $(".number_product_on_cart").text(data);
+                if (data.success == false) {
+                    $('#registerNotification').text(data.messages);
+
                 } else {
-                    $(".number_product_on_cart").text(0);
+                    alert(data.messages);
+                    window.location.href = '/Home/Index';
                 }
             }
         });

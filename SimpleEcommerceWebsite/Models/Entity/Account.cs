@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SimpleEcommerceWebsite.Models
-{    
-    [Table("Account")]
+{
+    [Table("Accounts")]
     public class Account
     {
         [Key]

@@ -102,9 +102,11 @@ namespace SimpleEcommerceWebsite.Controllers
         {
             var shoppingCartService = new ShoppingCartService();
 
-            var cart = shoppingCartService.RetrieveShoppingCart();
+            List<Product> products = new List<Product>();
 
-            return null;
+            SessionManager.SetSessionObject(SessionObjectEnum.SessionEnum.ShoppingCart, new ShoppingCart(products));
+
+            return Json(new { success = "true", messages = "Check out successfull" });
         }
 
         [HttpPost]
