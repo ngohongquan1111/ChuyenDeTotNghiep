@@ -8,30 +8,47 @@
     @{
         if (products.Any())
         {
-            foreach (var product in products)
-            {
-                <div class="row-fluid">
-                    <div class="span2">
-                        <img src="@product.ImageURL" alt="">
-                    </div>
-                    <div class="span6">
-                        <h5>@product.ProductName </h5>
-                        <p>
-                            @product.Description
-                        </p>
-                    </div>
-                    <div class="span4 alignR">
-                        <form class="form-horizontal qtyFrm">
-                            <h3>$@product.Price</h3>
-                            <div class="btn-group">
-                                <button class="defaultBtn" onclick="AddToCart(@product.ProductID,1)"><span class=" icon-shopping-cart"></span> Add to cart</button>
-                                <a class="shopBtn" href="/Product/ViewDetail?productId=@product.ProductID">View</a>
+            <div>
+                @foreach (var product in products)
+                {
+                    @*<div class="row-fluid">
+                            <div class="span2">
+                                <img src="@product.ImageURL" alt="">
                             </div>
-                        </form>
-                    </div>
-                </div>
-                <hr class="soften">
-            }
+                            <div class="span6">
+                                <h5>@product.ProductName </h5>
+                                <p>
+                                    @product.Description
+                                </p>
+                            </div>
+                            <div class="span4 alignR">
+                                <form class="form-horizontal qtyFrm">
+                                    <h3>$@product.Price</h3>
+                                    <div class="btn-group">
+                                        <button class="defaultBtn" onclick="AddToCart(@product.ProductID,1)"><span class=" icon-shopping-cart"></span> Add to cart</button>
+                                        <a class="shopBtn" href="/Product/ViewDetail?productId=@product.ProductID">View</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <hr class="soften">*@
+                    <ul class="thumbnails" style="display:inline-block">
+                        <li class="span3">
+                            <div class="thumbnail">
+                                <a href="/Product/ViewDetail?productId=@product.ProductID" class="overlay"></a>
+                                <a class="zoomTool" href="/Product/ViewDetail?productId=@product.ProductID" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
+                                <a href="/Product/ViewDetail?productId=@product.ProductID"><img src="@product.ImageURL" alt=""></a>
+                                <div class="caption cntr">
+                                    <p>@product.ProductName</p>
+                                    <p><strong> $@product.Price</strong></p>
+                                    <h4><a class="shopBtn" href="#" title="add to cart" onclick="AddToCart(@product.ProductID,1)"> Add to cart </a></h4>
+                                    <br class="clr">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                }
+            </div>
         }
         else
         {
