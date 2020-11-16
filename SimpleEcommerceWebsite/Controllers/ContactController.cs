@@ -67,7 +67,7 @@ namespace SimpleEcommerceWebsite.Controllers
                 }
                 else
                 {
-                    return Json(new { success = "false", messages = "Login fail" });
+                    return Json(new { success = false, messages = "Login fail" });
                 }
             }
             catch (Exception ex)

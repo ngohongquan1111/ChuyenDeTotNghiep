@@ -58,4 +58,21 @@ function GetTotalAmount(){
         }
     });
 }
+
+//function CheckIsLogin() {
+//    $.ajax({
+//        url: '/Home/CheckIsLogin/',
+//        type: 'POST',
+//        async: false, cache: false, traditional: true,
+//        success: function (data) {
+//            console.log(data);
+//            if (data.success == false) {
+//                $('#signInNotification').text(data.messages);
+//            } else {
+//                alert('Login Successfull');
+//                window.location = '/Home/Index';
+//            }
+//        }
+//    });
+//}
 //function

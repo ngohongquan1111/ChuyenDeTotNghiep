@@ -1,5 +1,6 @@
 ﻿@using SimpleEcommerceWebsite.Models
 @using SimpleEcommerceWebsite.Service.Resource.Enum;
+@using SimpleEcommerceWebsite.Service.BaseService;
 @{
     ViewBag.Title = "CheckOutCart";
     Layout = "~/Views/Shared/_No_LeftMenu_Layout.cshtml";
@@ -40,12 +41,12 @@
                 </div>
                 <hr class="soften">
             }
-      
+
             <button class="exclusive shopBtn" style="width:-webkit-fill-available" onclick="AcceptPaymen()"><span class="icon-check"></span> Pay: <span class="totalAmount"></span></button>
-      
-          
+
+            <p id="isLoginMOtherFucker" style="display:none">@(AccountService.IsLogin())</p>
         </div>
-     
+
     </div>
 </div>
 
@@ -75,9 +76,9 @@
     }
 
     function AcceptPaymen() {
-        var isLogin = $('.CurrentLoginState').val();
+        var isLogin = $('#isLoginMOtherFucker').text();
 
-        if (!isLogin) {
+        if (isLogin != "True") {
             alert('You have to login to finnish payment');
             window.location.href = '/Contact/Login';
             return;

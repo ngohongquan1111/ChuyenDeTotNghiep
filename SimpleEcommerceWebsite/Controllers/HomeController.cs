@@ -127,5 +127,24 @@ namespace SimpleEcommerceWebsite.Controllers
 
             return false;
         }
+
+        [HttpPost]
+        public bool CheckIsLogin(int productId)
+        {
+            var shoppingCartService = new ShoppingCartService();
+
+            var productService = new ProductService();
+
+            var product = productService.GetProductById(productId);
+
+            if (product != null)
+            {
+                shoppingCartService.RemoveOrder(product);
+
+                return true;
+            }
+
+            return false;
+        }
     }
 }
