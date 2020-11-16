@@ -75,4 +75,3 @@ function GetTotalAmount(){
 //        }
 //    });
 //}
-//function

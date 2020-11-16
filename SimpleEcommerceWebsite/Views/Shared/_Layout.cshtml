@@ -123,7 +123,14 @@
                                 @{
                                     if (isLogin)
                                     {
-                                        <a href="#">@contactEmail </a>
+                                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> @contactEmail <b class="caret"></b></a>
+                                        <div class="dropdown-menu">
+                                            <div class="form-horizontal loginFrm">
+                                                <div class="control-group">
+                                                    <button class="btn-block" onclick="LogOut()">Log out</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     }
                                     else
                                     {
@@ -254,6 +261,23 @@
     </div>
     <a href="#" class="gotop"><i class="icon-double-angle-up"></i></a>
     <!-- Placed at the end of the document so the pages load faster -->
-
+    <script>
+        function LogOut() {
+            $.ajax({
+                url: '/Home/LogOutAccount/',
+                type: 'POST',
+                async: false, cache: false, traditional: true,
+                success: function (data) {
+                    console.log(data);
+                    if (data.success == "true") {
+                        alert('Logout Successfull');
+                        window.location = '/Home/Index';
+                    } else {
+                        alert('Login Fail');
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>

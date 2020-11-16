@@ -20,10 +20,10 @@
     <script src="~/Content/assets/js/jquery.js"></script>
     <script src="~/Content/assets/js/jquery.easing-1.3.min.js"></script>
     <script src="~/Content/assets/js/jquery.scrollTo-1.4.3.1-min.js"></script>
-
+    <script src="~/Scripts/PaymentJs/CartProcessing.js"></script>
     <script src="~/Content/assets/js/bootstrap.min.js"></script>
     <script src="~/Content/assets/js/shop.js"></script>
-    <script src="~/Scripts/PaymentJs/CartProcessing.js"></script>
+
     <!-- Bootstrap styles -->
     <link href="~/Content/assets/css/bootstrap.css" rel="stylesheet" />
     <!-- Customize styles -->
@@ -92,7 +92,7 @@
                 </div>
                 <div class="span4 alignR">
                     <p><br> <strong> Support (24/7) :  0800 1234 678 </strong><br><br></p>
-                  
+
                     <a href="/Home/CheckOutCart"><span class="btn btn-small"> <span class="icon-shopping-cart"> - Your cart: </span> <span class="number_product_on_cart" style="color:red; font-weight:bold">[0]</span></span></a>
                 </div>
             </div>
@@ -122,7 +122,14 @@
                                 @{
                                     if (isLogin)
                                     {
-                                        <a href="#">@contactEmail </a>
+                                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> @contactEmail <b class="caret"></b></a>
+                                        <div class="dropdown-menu">
+                                            <div class="form-horizontal loginFrm">
+                                                <div class="control-group">
+                                                    <button class="btn-block" onclick="LogOut()">Log out</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     }
                                     else
                                     {
@@ -139,7 +146,7 @@
         Body Section
         -->
         <div class="row">
-         
+
             <div class="span12">
                 @RenderBody()
             </div>
@@ -229,5 +236,24 @@
     </div>
     <a href="#" class="gotop"><i class="icon-double-angle-up"></i></a>
     <!-- Placed at the end of the document so the pages load faster -->
+    <script>
+        function LogOut() {
+            $.ajax({
+                url: '/Home/LogOutAccount/',
+                type: 'POST',
+                async: false, cache: false, traditional: true,
+                success: function (data) {
+                    console.log(data);
+                    if (data.success == "true") {
+                        alert('Logout Successfull');
+                        window.location = '/Home/Index';
+                    } else {
+                        alert('Login Fail');
+                    }
+                }
+            });
+        }
+    </script>
 </body>
+
 </html>

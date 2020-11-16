@@ -146,5 +146,13 @@ namespace SimpleEcommerceWebsite.Controllers
 
             return false;
         }
+
+        [HttpPost]
+        public ActionResult LogOutAccount()
+        {
+            SessionManager.Dispose();
+
+            return Json(new { success = "true", messages = "Log out success" });
+        }
     }
 }
