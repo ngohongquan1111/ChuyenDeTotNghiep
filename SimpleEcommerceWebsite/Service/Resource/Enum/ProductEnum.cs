@@ -20,4 +20,11 @@
             Brand
         }
     }
+
+    public enum PriceOrderEnum
+    {
+        Default,
+        Increase,
+        Decrease
+    }
 }

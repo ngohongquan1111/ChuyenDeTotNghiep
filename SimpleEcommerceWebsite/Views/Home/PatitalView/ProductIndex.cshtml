@@ -1,0 +1,42 @@
+﻿@using SimpleEcommerceWebsite.Models;
+@{
+    var products = ViewBag.Products == null ? new List<Product>() : ViewBag.Products as List<Product>;
+}
+
+@{
+    if (products.Any())
+    {
+        <div>
+            @foreach (var product in products)
+            {
+                <ul class="thumbnails" style="display:inline-block">
+                    <li class="span3">
+                        <div class="thumbnail">
+                            <a href="/Product/ViewDetail?productId=@product.ProductID" class="overlay"></a>
+                            <a class="zoomTool" href="/Product/ViewDetail?productId=@product.ProductID" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
+                            <a href="/Product/ViewDetail?productId=@product.ProductID"><img src="@product.ImageURL" alt=""></a>
+                            <div class="caption cntr">
+                                <p>@product.ProductName</p>
+                                <p><strong> $@product.Price</strong></p>
+                                <h4><a class="shopBtn" href="#" title="add to cart" onclick="AddToCart(@product.ProductID,1)"> Add to cart </a></h4>
+                                <br class="clr">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row-fluid">
+            <div class="span6">
+                <h5>Data Not Found </h5>
+                <p>
+                    Not found any items yet
+                </p>
+            </div>
+        </div>
+        <hr class="soften">
+    }
+}

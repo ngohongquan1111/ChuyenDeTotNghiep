@@ -1,0 +1,42 @@
+﻿@using SimpleEcommerceWebsite;
+@using SimpleEcommerceWebsite.Service.Resource.Enum;
+@model SimpleEcommerceWebsite.Models.SearchModel
+@{
+    var productAllcode = AllcodeService.GetAllCodeByTable("Product");
+    var productType = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.ProductType.ToString());
+}
+
+@using (Html.BeginForm("SearchProduct", "Home", FormMethod.Post, new { @id = "frmSearch" }))
+{
+    @*<label>Product Id:</label>
+        @Html.TextBoxFor(m => m.ProductId, new { @placeholder = "Input Productid" })*@
+    <div class="row-fluid">
+        <label>Product Name:</label>
+        @Html.TextBoxFor(m => m.ProductName, new { @placeholder = "Input Product Name", @class = "span9" })
+    </div>
+
+    <div class="row-fluid">
+        <div class="span6">
+            <label>
+                Type:
+            </label>
+            @Html.DropDownListFor(m => m.ProductTypeId, new SelectList(productType, "IdentityValue", "IdentityValueName"), new { id = "ProductTypeId" })
+        </div>
+        <div class="span6">
+            <label>
+                Price:
+            </label>
+            <select id="PriceOrder">
+                <option value="@PriceOrderEnum.Increase">@PriceOrderEnum.Increase.ToString()</option>
+                <option value="@PriceOrderEnum.Decrease">@PriceOrderEnum.Decrease.ToString()</option>
+            </select>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <label style="display:inline" class="span9"></label>
+        <input type="submit" value="Search">
+    </div>
+
+
+  
+}  

@@ -1,72 +1,38 @@
-﻿@using SimpleEcommerceWebsite.Models
-@{
-    var products = ViewBag.Products == null ? new List<Product>() : ViewBag.Products as List<Product>;
-    ViewBag.Title = "Home Page";
-}
+﻿<div class="well well-small">
+    @Html.Partial("~/Views/Shared/Partial/SearchProductPartialView.cshtml")
+</div>
 
-<div class="well well-small">
-    @{
-        if (products.Any())
-        {
-            <div>
-                @foreach (var product in products)
-                {
-                    @*<div class="row-fluid">
-                            <div class="span2">
-                                <img src="@product.ImageURL" alt="">
-                            </div>
-                            <div class="span6">
-                                <h5>@product.ProductName </h5>
-                                <p>
-                                    @product.Description
-                                </p>
-                            </div>
-                            <div class="span4 alignR">
-                                <form class="form-horizontal qtyFrm">
-                                    <h3>$@product.Price</h3>
-                                    <div class="btn-group">
-                                        <button class="defaultBtn" onclick="AddToCart(@product.ProductID,1)"><span class=" icon-shopping-cart"></span> Add to cart</button>
-                                        <a class="shopBtn" href="/Product/ViewDetail?productId=@product.ProductID">View</a>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <hr class="soften">*@
-                    <ul class="thumbnails" style="display:inline-block">
-                        <li class="span3">
-                            <div class="thumbnail">
-                                <a href="/Product/ViewDetail?productId=@product.ProductID" class="overlay"></a>
-                                <a class="zoomTool" href="/Product/ViewDetail?productId=@product.ProductID" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-                                <a href="/Product/ViewDetail?productId=@product.ProductID"><img src="@product.ImageURL" alt=""></a>
-                                <div class="caption cntr">
-                                    <p>@product.ProductName</p>
-                                    <p><strong> $@product.Price</strong></p>
-                                    <h4><a class="shopBtn" href="#" title="add to cart" onclick="AddToCart(@product.ProductID,1)"> Add to cart </a></h4>
-                                    <br class="clr">
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                }
-            </div>
-        }
-        else
-        {
-            <div class="row-fluid">
-                <div class="span6">
-                    <h5>Data Not Found </h5>
-                    <p>
-                        Not found any items yet
-                    </p>
-                </div>
-            </div>
-            <hr class="soften">
-        }
-    }
+<div class="well well-small" id="productItems">
+    @Html.Partial("~/Views/Home/PatitalView/ProductIndex.cshtml")
 </div>
 
 <script>
     function DirectView(currentId) {
         window.location.href = '/Product/ViewDetail?productId=' + currentId;
     }
+    $('#frmSearch').on('submit', function (e) {
+        try {
+
+            e.preventDefault();
+
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                data: $(this).serialize(),
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                async: true, cache: false, traditional: true,
+                success: function (data) {
+                    console.log(data);
+                    $("#productItems").html(data);
+                }
+            });
+        }
+        catch (e) {
+            alert(e);
+            return false;
+        }
+    });
+
 </script>

@@ -154,5 +154,30 @@ namespace SimpleEcommerceWebsite.Controllers
 
             return Json(new { success = "true", messages = "Log out success" });
         }
+
+        [HttpPost]
+        public ActionResult SearchProduct(SearchModel searchInfo)
+        {
+            var productService = new ProductService();
+
+            Expression<Func<Product, bool>> predicate = products => products.ProductStatusId != (int)ProductEnum.Status.Deleted;
+
+            var productsInfo = productService.GetProductByExpression(predicate);
+
+            if (!string.IsNullOrEmpty(searchInfo.ProductName))
+            {
+                productsInfo = productsInfo.Where(p => p.ProductName.Contains(searchInfo.ProductName)).ToList();
+            }
+
+            if (searchInfo.ProductTypeId > 0)
+            {
+                productsInfo = productsInfo.Where(p => p.ProductTypeId == searchInfo.ProductTypeId ).ToList();
+            }
+
+            ViewBag.Products = searchInfo.OrderBy == (int)PriceOrderEnum.Increase ? productsInfo.OrderBy(x => x.Price).ToList() :
+                                                                                    productsInfo.OrderByDescending(x => x.Price).ToList();
+
+            return PartialView("~/Views/Home/PatitalView/ProductIndex.cshtml");
+        }
     }
 }

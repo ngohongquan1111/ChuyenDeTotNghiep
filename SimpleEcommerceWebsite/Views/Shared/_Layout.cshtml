@@ -115,9 +115,6 @@
                             <li class="active"><a href="/Home/Index">Home	</a></li>
                             <li class=""><a href="/Home/SiteManager">Site Manager</a></li>
                         </ul>
-                        <form action="#" class="navbar-search pull-left">
-                            <input type="text" placeholder="Search" class="search-query span2">
-                        </form>
                         <ul class="nav pull-right">
                             <li class="dropdown">
                                 @{
@@ -262,6 +259,11 @@
     <a href="#" class="gotop"><i class="icon-double-angle-up"></i></a>
     <!-- Placed at the end of the document so the pages load faster -->
     <script>
+        $(document).ready(function () {
+            console.log("ready!");
+        });
+
+
         function LogOut() {
             $.ajax({
                 url: '/Home/LogOutAccount/',
