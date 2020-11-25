@@ -1,9 +1,7 @@
-﻿@using SimpleEcommerceWebsite.Models;
-@using SimpleEcommerceWebsite.Service.Resource.Enum;
-@{
+﻿@{
     Layout = "/Views/Shared/_No_LeftMenu_Layout.cshtml";
     ViewBag.Title = "ListProduct";
-    var products = ViewBag.Product != null ? ViewBag.Product as List<Product> : new List<Product>();
+
 }
 <style>
     .wrapper-content {
@@ -32,114 +30,68 @@
 </style>
 <h2>List Product</h2>
 <div class="well">
-
+    @Html.Partial("~/Views/Shared/Partial/SearchProductPartialView.cshtml")
 </div>
-<div class="well">
-    <table class="table" id="product-table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Image</th>
-                <th>Producer</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Price</th>
-                <th>Functions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                if (products.Any())
-                {
-                    foreach (var product in products)
-                    {
-                        <tr>
-                            <td>
-                                <div class="wrapper-content">
-                                    <p>@product.ProductID</p>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="wrapper-content">
-                                    <p>@product.ProductName</p>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="wrapper-content">
-                                    <p><img src="@product.ImageURL" height="100" width="100"></p>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="wrapper-content">
-                                    <p>@AllcodeService.GetIdentityNameFromValue("Product",ProductEnum.ProductCodes.Producer.ToString(),product.ProducerId)</p>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="wrapper-content">
-                                   
-                                    <p> @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.ProductType.ToString(), product.ProductTypeId)</p>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="wrapper-content">
-                                    <p>  @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.ProductStatus.ToString(), product.ProductStatusId)</p>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="wrapper-content">
-                                    <p>@product.Price.ToString()</p>
-                                </div>
-                            </td>
-                            <td>
-                                <button class="btn btn-default" onclick="DirectView(@product.ProductID)">View</button> ||
-                                <button class="btn btn-warning" onclick="EditProduct(@product.ProductID)">Edit</button> ||
-                                <button class="btn btn-danger" onclick="DeleteProduct(@product.ProductID)">Delete</button>
-                            </td>
-                        </tr>
+<div class="well" id="productItems">
+    @Html.Partial("~/Views/Product/TableListProducts.cshtml")
+</div>
+
+<script>
+    function DirectView(currentId) {
+        window.location = '/Product/ViewDetail?productId=' + currentId;
+    }
+
+    function EditProduct(currentId) {
+        window.location = '/Product/UpdateProduct?productId=' + currentId;
+    }
+
+    function DeleteProduct(currentId) {
+
+        var isConfirm = confirm('Are you sure to delete this Product?');
+
+        if (isConfirm) {
+            $.ajax({
+                url: '/Product/DeleteProduct/',
+                type: 'POST',
+                data: {
+                    productId: currentId
+                },
+                async: false, cache: false, traditional: true,
+                success: function (data) {
+                    console.log(data);
+                    if (data > 0) {
+                        alert('Delete success');
+                        location.reload();
+                    } else {
+                        alert('Delete Fail');
                     }
                 }
-                else
-                {
-                <td colspan="8" style="text-align:center; font-size:large;padding-top:20px">No data found</td>
-            }
-            }
-            </tbody>
-        </table>
-    </div>
-
-    <script>
-        function DirectView(currentId) {
-            window.location = '/Product/ViewDetail?productId=' + currentId;
+            });
         }
+    }
 
-        function EditProduct(currentId) {
-            window.location = '/Product/UpdateProduct?productId=' + currentId;
+    $('#frmSearch').on('submit', function (e) {
+        try {
+
+            e.preventDefault();
+
+            $.ajax({
+                url: "/Product/SearchProduct",
+                type: this.method,
+                data: $(this).serialize(),
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                async: true, cache: false, traditional: true,
+                success: function (data) {
+                    console.log(data);
+                    $("#productItems").html(data);
+                }
+            });
         }
-
-        function DeleteProduct(currentId) {
-
-            var isConfirm = confirm('Are you sure to delete this Product?');
-
-            if (isConfirm) {
-                $.ajax({
-                    url: '/Product/DeleteProduct/',
-                    type: 'POST',
-                    data: {
-                        productId: currentId
-                    },
-                    async: false, cache: false, traditional: true,
-                    success: function (data) {
-                        console.log(data);
-                        if (data > 0) {
-                            alert('Delete success');
-                            location.reload();
-                        } else {
-                            alert('Delete Fail');
-                        }
-                    }
-                });
-            }
+        catch (e) {
+            alert(e);
+            return false;
         }
-
-    </script>
+    });
+</script>

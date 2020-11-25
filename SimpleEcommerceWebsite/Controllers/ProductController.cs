@@ -3,6 +3,7 @@ using SimpleEcommerceWebsite.Service;
 using SimpleEcommerceWebsite.Service.Resource.Enum;
 using System;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 
@@ -18,7 +19,7 @@ namespace SimpleEcommerceWebsite.Controllers
 
             Expression<Func<Product, bool>> predicate = products => products.ProductStatusId != (int)ProductEnum.Status.Deleted;
 
-            ViewBag.Product = productService.GetProductByExpression(predicate);
+            ViewBag.Products = productService.GetProductByExpression(predicate);
 
             return View();
         }
@@ -121,18 +122,28 @@ namespace SimpleEcommerceWebsite.Controllers
         }
 
         [HttpPost]
-        public ActionResult SearchProduct(Product product)
+        public ActionResult SearchProduct(SearchModel searchInfo)
         {
             var productService = new ProductService();
 
-            Expression<Func<Product, bool>> predicate = products => products.ProductName.Contains(product.ProductName.Trim()) ||
-                                                                    products.ProductStatusId == product.ProductStatusId ||
-                                                                    products.ProductTypeId == product.ProductTypeId ||
-                                                                    products.ProductID == product.ProductID;
+            Expression<Func<Product, bool>> predicate = products => products.ProductStatusId != (int)ProductEnum.Status.Deleted;
 
-            ViewBag.SearchResult = productService.GetProductByExpression(predicate);
+            var productsInfo = productService.GetProductByExpression(predicate);
 
-            return View();
+            if (!string.IsNullOrEmpty(searchInfo.ProductName))
+            {
+                productsInfo = productsInfo.Where(p => p.ProductName.Contains(searchInfo.ProductName)).ToList();
+            }
+
+            if (searchInfo.ProductTypeId > 0)
+            {
+                productsInfo = productsInfo.Where(p => p.ProductTypeId == searchInfo.ProductTypeId).ToList();
+            }
+
+            ViewBag.Products = searchInfo.OrderBy == (int)PriceOrderEnum.Increase ? productsInfo.OrderBy(x => x.Price).ToList() :
+                                                                                    productsInfo.OrderByDescending(x => x.Price).ToList();
+
+            return PartialView("~/Views/Product/TableListProducts.cshtml");
         }
     }
 }

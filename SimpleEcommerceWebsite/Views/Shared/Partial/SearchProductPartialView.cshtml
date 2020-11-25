@@ -1,12 +1,16 @@
-﻿@using SimpleEcommerceWebsite;
+﻿@using SimpleEcommerceWebsite.Models;
+@using SimpleEcommerceWebsite;
 @using SimpleEcommerceWebsite.Service.Resource.Enum;
 @model SimpleEcommerceWebsite.Models.SearchModel
 @{
     var productAllcode = AllcodeService.GetAllCodeByTable("Product");
     var productType = productAllcode.Where(x => x.IdentityScope == ProductEnum.ProductCodes.ProductType.ToString());
-}
 
-@using (Html.BeginForm("SearchProduct", "Home", FormMethod.Post, new { @id = "frmSearch" }))
+    var orderPrice = new List<Allcode>() { new Allcode {Id = (int)PriceOrderEnum.Increase, IdentityValueName = PriceOrderEnum.Increase.ToString() },
+                                          new Allcode {Id = (int)PriceOrderEnum.Decrease, IdentityValueName = PriceOrderEnum.Decrease.ToString() }};
+                                         }
+
+    @using (Html.BeginForm("SearchProduct", "Home", FormMethod.Post, new { @id = "frmSearch" }))
 {
     @*<label>Product Id:</label>
         @Html.TextBoxFor(m => m.ProductId, new { @placeholder = "Input Productid" })*@
@@ -26,10 +30,7 @@
             <label>
                 Price:
             </label>
-            <select id="PriceOrder">
-                <option value="@PriceOrderEnum.Increase">@PriceOrderEnum.Increase.ToString()</option>
-                <option value="@PriceOrderEnum.Decrease">@PriceOrderEnum.Decrease.ToString()</option>
-            </select>
+            @Html.DropDownListFor(m => m.OrderBy, new SelectList(orderPrice, "Id", "IdentityValueName"))
         </div>
     </div>
     <div class="row-fluid">

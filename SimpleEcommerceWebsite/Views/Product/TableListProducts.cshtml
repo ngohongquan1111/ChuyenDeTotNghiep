@@ -1,0 +1,78 @@
+﻿@using SimpleEcommerceWebsite.Models;
+@using SimpleEcommerceWebsite.Service.Resource.Enum;
+@{
+    
+    var products = ViewBag.Products != null ? ViewBag.Products as List<Product> : new List<Product>();
+}
+
+<table class="table" id="product-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Producer</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Price</th>
+            <th>Functions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (products.Any())
+            {
+                foreach (var product in products)
+                {
+                    <tr>
+                        <td>
+                            <div class="wrapper-content">
+                                <p>@product.ProductID</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="wrapper-content">
+                                <p>@product.ProductName</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="wrapper-content">
+                                <p><img src="@product.ImageURL" height="100" width="100"></p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="wrapper-content">
+                                <p>@AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.Producer.ToString(), product.ProducerId)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="wrapper-content">
+
+                                <p> @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.ProductType.ToString(), product.ProductTypeId)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="wrapper-content">
+                                <p>  @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.ProductStatus.ToString(), product.ProductStatusId)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="wrapper-content">
+                                <p>@product.Price.ToString()</p>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-default" onclick="DirectView(@product.ProductID)">View</button> ||
+                            <button class="btn btn-warning" onclick="EditProduct(@product.ProductID)">Edit</button> ||
+                            <button class="btn btn-danger" onclick="DeleteProduct(@product.ProductID)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+            <td colspan="8" style="text-align:center; font-size:large;padding-top:20px">No data found</td>
+        }
+        }
+        </tbody>
+    </table>
