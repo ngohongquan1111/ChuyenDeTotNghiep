@@ -194,11 +194,12 @@
     {
         var quantity = parseInt($('#' + id).val());
 
-        if (quantity == 1) {
-            return;
-        }
-
         if (type == 1) {
+
+            if (quantity == 1) {
+                return;
+            }
+
             quantity = quantity - 1;
         }
         else {
