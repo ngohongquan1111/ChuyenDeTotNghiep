@@ -44,6 +44,16 @@ namespace SimpleEcommerceWebsite.Service
             }
         }
 
+        public void DeleteOrders(Product product)
+        {
+            var carts = RetrieveShoppingCart();
+
+            if (carts != null)
+            {
+                carts.RemoveProductFromCarts(product);
+            }
+        }
+
         public int GetTotalItemInCart()
         {
             var carts = RetrieveShoppingCart();

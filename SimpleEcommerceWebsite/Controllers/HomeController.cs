@@ -87,6 +87,58 @@ namespace SimpleEcommerceWebsite.Controllers
         }
 
         [HttpPost]
+        public bool ChangeQuantity(int productId, int numberOfProduct)
+        {
+            try
+            {
+                var productService = new ProductService();
+
+                var shoppingCartService = new ShoppingCartService();
+
+                var product = productService.GetProductById(productId);
+
+                shoppingCartService.DeleteOrders(product);
+
+                if (product != null)
+                {
+                    List<Product> products = new List<Product>();
+
+                    for (int i = 0; i < numberOfProduct; i++)
+                    {
+                        products.Add(product);
+                    }
+
+                    shoppingCartService.AddToCard(products);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        
+        [HttpPost]
+        public bool RemoveOrderProductFromCart(int productId)
+        {
+            var shoppingCartService = new ShoppingCartService();
+
+            var productService = new ProductService();
+
+            var product = productService.GetProductById(productId);
+
+            if (product != null)
+            {
+                shoppingCartService.DeleteOrders(product);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        [HttpPost]
         public decimal GetTotalAmount()
         {
             var shoppingCartService = new ShoppingCartService();

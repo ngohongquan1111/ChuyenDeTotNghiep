@@ -6,6 +6,8 @@
     Layout = "~/Views/Shared/_No_LeftMenu_Layout.cshtml";
 
     var itemsInCart = ViewBag.ItemsInCart == null ? new List<Product>() : ViewBag.ItemsInCart as List<Product>;
+
+    var groupItems = itemsInCart.GroupBy(x => x.ProductID);
 }
 
 <h2>Your Cart: @(itemsInCart!= null ? itemsInCart.Count() : 0) Item(s)</h2>
@@ -15,26 +17,62 @@
 <div class="row-fluid">
     <div class="span12">
         <div class="well">
-            @foreach (var product in itemsInCart)
+            @*@foreach (var product in itemsInCart)
+        {
+            <div class="row-fluid">
+                <div class="span2">
+                    <img src="@product.ImageURL" alt="">
+                </div>
+                <div class="span6">
+                    <h5>@product.ProductName </h5>
+                    <p>
+                        @product.Description
+                    </p>
+                    @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.Producer.ToString(), product.ProducerId)
+                    <p>
+                    <p> @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.ProductType.ToString(), product.ProductTypeId)</p>
+                </div>
+                <div class="span4 alignR">
+                    <form class="form-horizontal qtyFrm">
+                        <div class="row">
+                            <h3>Cost: $@product.Price</h3>
+                        </div>
+                        <div class="row-fluid">
+                                <input type="button" value="-" />
+                                <input type="number" value="2" class="input-mini" />
+                                <input type="button" value="+" />
+                            <button class="defaultBtn" onclick="RemoveFromCart(@product.ProductID)"><span class=" icon-remove"></span> Remove</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr class="soften">
+        }*@
+            @foreach (var groupedItems in groupItems)
             {
                 <div class="row-fluid">
                     <div class="span2">
-                        <img src="@product.ImageURL" alt="">
+                        <img src="@groupedItems.Select(x => x.ImageURL).FirstOrDefault()" alt="">
                     </div>
                     <div class="span6">
-                        <h5>@product.ProductName </h5>
+                        <h5>@groupedItems.Select(x => x.ProductName).FirstOrDefault()</h5>
                         <p>
-                            @product.Description
+                            @groupedItems.Select(x => x.Description).FirstOrDefault()
                         </p>
-                        @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.Producer.ToString(), product.ProducerId)
+                        @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.Producer.ToString(), groupedItems.Select(x => x.ProducerId).FirstOrDefault())
                         <p>
-                        <p> @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.ProductType.ToString(), product.ProductTypeId)</p>
+                        <p> @AllcodeService.GetIdentityNameFromValue("Product", ProductEnum.ProductCodes.ProductType.ToString(), groupedItems.Select(x => x.ProductTypeId).FirstOrDefault())</p>
                     </div>
                     <div class="span4 alignR">
                         <form class="form-horizontal qtyFrm">
-                            <h3>Cost: $@product.Price</h3>
-                            <div class="btn-group">
-                                <button class="defaultBtn" onclick="RemoveFromCart(@product.ProductID)"><span class=" icon-remove"></span> Remove</button>
+                            <div class="row">
+                                <h3>Cost: $@groupedItems.Sum(x => x.Price)</h3>
+                            </div>
+                            <div class="row-fluid">
+                                <input type="button" value="-" onclick="changeQuantityByButton(1,@groupedItems.Select(x => x.ProductID).FirstOrDefault())"/>
+                                <input type="number" id="@groupedItems.Select(x => x.ProductID).FirstOrDefault()" value="@groupedItems.Count()" class="input-mini" onchange="ChangeQuantity(@groupedItems.Select(x => x.ProductID).FirstOrDefault())" />
+                                <input type="button" value="+"  onclick="changeQuantityByButton(2,@groupedItems.Select(x => x.ProductID).FirstOrDefault())"/>
+                                <button class="defaultBtn" onclick="RemoveAllProductFromCart(@groupedItems.Select(x => x.ProductID).FirstOrDefault())"><span class=" icon-remove"></span> Remove</button>
                             </div>
                         </form>
                     </div>
@@ -98,6 +136,80 @@
                 }
             }
         });
+    }
+    ////New
+    function ChangeQuantity(productId) {
+       
+        var quantity = $('#'+productId).val();
+ 
+        $.ajax({
+            url: '/Home/ChangeQuantity/',
+            type: 'POST',
+            data: {
+                productId: productId,
+                numberOfProduct: quantity
+            },
+            async: false, cache: false, traditional: true,
+            success: function (data) {
+                //console.log(data);
+                //if (data == true) {
+                //    alert("Add success");
+                //} else {
+                //    alert("Add success");
+                //}
+            }
+        });
+
+        location.reload();
+        GetAllItemInCart();
+        GetTotalAmount();
+        
+    }
+
+    function RemoveAllProductFromCart(productId) {
+        var isConfirm = confirm('Are you sure to remove this Product ?');
+
+        if (isConfirm == true) {
+            $.ajax({
+                url: '/Home/RemoveOrderProductFromCart/',
+                type: 'POST',
+                data: {
+                    productId: productId
+                },
+                async: false, cache: false, traditional: true,
+                success: function (data) {
+                    if (data == "true") {
+                       
+                        location.reload();
+                    } else {
+                      
+                        location.reload();
+                    }
+                }
+            });
+        }
+    }
+
+    function changeQuantityByButton(type, id)
+    {
+        var quantity = parseInt($('#' + id).val());
+
+        if (quantity == 1) {
+            return;
+        }
+
+        if (type == 1) {
+            quantity = quantity - 1;
+        }
+        else {
+            quantity = quantity + 1;
+        }
+
+       
+         $('#' + id).val(quantity);
+        
+        ChangeQuantity(id);
+
     }
 </script>
 

@@ -25,6 +25,12 @@ namespace SimpleEcommerceWebsite.Models
 
             this._products.Remove(targetProduct);
         }
+        public void RemoveProductFromCarts(Product product)
+        {
+            //var targetProduct = this._products.Where(x => x.ProductID == product.ProductID);
+
+            this._products.RemoveAll(x => x.ProductID == product.ProductID);
+        }
 
         public int GetCurrentNumberOfItem()
         {
